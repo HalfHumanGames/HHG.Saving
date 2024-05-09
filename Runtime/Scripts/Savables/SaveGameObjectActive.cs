@@ -12,18 +12,18 @@ namespace HHG.SaveSystem.Runtime
             public bool Active;
         }
 
-        public void Load(SavableData saveData)
-        {
-            Data data = saveData as Data;
-            gameObject.SetActive(data.Active);
-        }
-
         public SavableData Save()
         {
             return new Data
             {
                 Active = gameObject.activeSelf
             };
+        }
+
+        public void Load(SavableData saveData)
+        {
+            Data data = saveData as Data;
+            gameObject.SetActive(data.Active);
         }
     }
 }

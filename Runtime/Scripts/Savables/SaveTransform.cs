@@ -14,14 +14,6 @@ namespace HHG.SaveSystem.Runtime
             public Vector3 LocalScale;
         }
 
-        public void Load(SavableData saveData)
-        {
-            Data data = saveData as Data;
-            transform.localPosition = data.LocalPosition;
-            transform.localRotation = data.LocalRotation;
-            transform.localScale = data.LocalScale;
-        }
-
         public SavableData Save()
         {
             return new Data
@@ -30,6 +22,14 @@ namespace HHG.SaveSystem.Runtime
                 LocalRotation = transform.localRotation,
                 LocalScale = transform.localScale
             };
+        }
+
+        public void Load(SavableData saveData)
+        {
+            Data data = saveData as Data;
+            transform.localPosition = data.LocalPosition;
+            transform.localRotation = data.LocalRotation;
+            transform.localScale = data.LocalScale;
         }
     }
 }

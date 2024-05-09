@@ -9,22 +9,14 @@ namespace HHG.SaveSystem.Runtime
     [RequireComponent(typeof(Saver), typeof(TilemapExporter))]
     public class SaveTilemap : MonoBehaviour, ISavable
     {
+        private Lazy<TilemapExporter> _exporter = new Lazy<TilemapExporter>();
+        private TilemapExporter exporter => _exporter.FromComponent(this);
+
         [System.Serializable]
         public class Data : SavableData
         {
             public List<string> Tiles = new List<string>();
             public List<SerializableTilemap> Tilemaps = new List<SerializableTilemap>();
-        }
-
-        private Lazy<TilemapExporter> _exporter = new Lazy<TilemapExporter>();
-        private TilemapExporter exporter => _exporter.FromComponent(this);
-
-        public void Load(SavableData saveData)
-        {
-            Data data = saveData as Data;
-            TilemapAsset tilemap = ScriptableObject.CreateInstance<TilemapAsset>();
-            tilemap.Initiialize(data.Tiles.Select(t => AssetRegistry.GetAsset<TileBase>(t)), data.Tilemaps);
-            exporter.Load(tilemap);
         }
 
         public SavableData Save()
@@ -38,6 +30,14 @@ namespace HHG.SaveSystem.Runtime
             };
             Destroy(tilemap);
             return data;
+        }
+
+        public void Load(SavableData saveData)
+        {
+            Data data = saveData as Data;
+            TilemapAsset tilemap = ScriptableObject.CreateInstance<TilemapAsset>();
+            tilemap.Initiialize(data.Tiles.Select(t => AssetRegistry.GetAsset<TileBase>(t)), data.Tilemaps);
+            exporter.Load(tilemap);
         }
     }
 }

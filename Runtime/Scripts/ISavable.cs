@@ -3,6 +3,6 @@ namespace HHG.SaveSystem.Runtime
     public interface ISavable
     {
         SavableData Save();
-        void Load(SavableData data);
+        void Load(SavableData saveData);
     }
 }
