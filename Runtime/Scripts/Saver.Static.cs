@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace HHG.SaveSystem.Runtime
 {
@@ -8,6 +9,17 @@ namespace HHG.SaveSystem.Runtime
     {
         private static Dictionary<string, Saver> savers = new Dictionary<string, Saver>();
         private static List<string> destroy = new List<string>();
+
+        static Saver()
+        {
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
+
+        private static void OnSceneUnloaded(Scene scene)
+        {
+            savers.Clear();
+            destroy.Clear();
+        }
 
         public static SaveData SaveAll()
         {

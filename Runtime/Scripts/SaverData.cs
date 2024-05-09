@@ -8,7 +8,7 @@ namespace HHG.SaveSystem.Runtime
     [Serializable]
     public class SaverData
     {
-        public GameObject Prefab => ResourceDatabase.GetResourceByGuid<GameObject>(PrefabGuid);
+        public GameObject Prefab => AssetRegistry.GetAsset<GameObject>(PrefabGuid);
 
         public string Id;
         public string PrefabGuid;

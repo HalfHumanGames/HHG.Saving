@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Guid = System.Guid;
 
 namespace HHG.SaveSystem.Runtime
@@ -83,7 +84,8 @@ namespace HHG.SaveSystem.Runtime
         {
             id = GuidUtil.EnsureUnique(this, s => s.id);
 
-            // Need this otherwise prefab and prefabGuid get unset on enter play mode
+            // The prefab and prefabGuid fields get unset on enter play mode
+            // So we only want to update them when the application is not playing
             if (!Application.isPlaying)
             {
 #if UNITY_EDITOR
