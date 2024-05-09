@@ -14,10 +14,6 @@ namespace HHG.SaveSystem.Runtime
             public Vector3 LocalScale;
         }
 
-        public string Id => id;
-
-        [SerializeField] private string id = Guid.NewGuid().ToString();
-
         public void Load(SavableData saveData)
         {
             Data data = saveData as Data;
@@ -30,7 +26,6 @@ namespace HHG.SaveSystem.Runtime
         {
             return new Data
             {
-                Id = id,
                 LocalPosition = transform.localPosition,
                 LocalRotation = transform.localRotation,
                 LocalScale = transform.localScale

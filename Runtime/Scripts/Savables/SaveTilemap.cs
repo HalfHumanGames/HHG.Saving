@@ -16,10 +16,6 @@ namespace HHG.SaveSystem.Runtime
             public List<SerializableTilemap> Tilemaps = new List<SerializableTilemap>();
         }
 
-        public string Id => id;
-
-        [SerializeField] private string id = System.Guid.NewGuid().ToString();
-
         private Lazy<TilemapExporter> _exporter = new Lazy<TilemapExporter>();
         private TilemapExporter exporter => _exporter.FromComponent(this);
 
@@ -37,7 +33,6 @@ namespace HHG.SaveSystem.Runtime
             exporter.Save(tilemap);
             Data data = new Data
             {
-                Id = id,
                 Tiles = tilemap.Tiles.Select(t => AssetRegistry.GetGuid(t)).ToList(),
                 Tilemaps = tilemap.Tilemaps.ToList()
             };

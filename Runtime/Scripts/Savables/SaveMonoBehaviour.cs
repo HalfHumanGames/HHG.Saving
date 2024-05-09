@@ -14,9 +14,6 @@ namespace HHG.SaveSystem.Runtime
             public List<string> Json = new List<string>();
         }
 
-        public string Id => id;
-
-        [SerializeField] private string id = Guid.NewGuid().ToString();
         [SerializeField] private MonoBehaviour[] monoBehaviours;
 
         public void Load(SavableData saveData)
@@ -33,17 +30,12 @@ namespace HHG.SaveSystem.Runtime
 
         public SavableData Save()
         {
-            Data data = new Data
-            {
-                Id = id
-            };
-
+            Data data = new Data();
             foreach (MonoBehaviour monoBehaviour in monoBehaviours)
             {
                 data.Types.Add(monoBehaviour.GetType().FullName);
                 data.Json.Add(JsonUtility.ToJson(monoBehaviour));
             }
-
             return data;
         }
     }

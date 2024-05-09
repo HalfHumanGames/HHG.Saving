@@ -1,11 +1,11 @@
 using HHG.Common.Runtime;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Guid = System.Guid;
 
 namespace HHG.SaveSystem.Runtime
 {
@@ -16,8 +16,17 @@ namespace HHG.SaveSystem.Runtime
         [SerializeField] private string prefabGuid;
 
         private bool instantiated;
-        private Lazy<ISavable> _savables = new Lazy<ISavable>();
-        private ISavable[] savables => _savables.FromComponents(this);
+        private Dictionary<string, ISavable> _savables;
+        private Dictionary<string, ISavable> savables {
+            get
+            {
+                if (_savables == null)
+                {
+                    _savables = GetComponents<ISavable>().ToDictionary(s => s.GetType().FullName, s => s);
+                }
+                return _savables;
+            }
+        }
 
         private void Awake()
         {
@@ -51,9 +60,11 @@ namespace HHG.SaveSystem.Runtime
                 ParentPath = instantiated ? transform.parent?.gameObject.GetPath() : null
             };
 
-            foreach (ISavable savable in savables)
+            foreach (ISavable savable in savables.Values)
             {
-                data.Data.Add(savable.Save());
+                SavableData savableData = savable.Save();
+                savableData.Type = savable.GetType().FullName;
+                data.Data.Add(savableData);
             }
 
             return data;
@@ -63,7 +74,10 @@ namespace HHG.SaveSystem.Runtime
         {
             foreach (SavableData data in saverData.Data)
             {
-                savables.FirstOrDefault(s => s.Id == data.Id).Load(data);
+                if (savables.TryGetValue(data.Type, out ISavable savable))
+                {
+                    savable.Load(data);
+                }
             }
         }
 

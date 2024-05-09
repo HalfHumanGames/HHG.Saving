@@ -12,10 +12,6 @@ namespace HHG.SaveSystem.Runtime
             public bool Active;
         }
 
-        public string Id => id;
-
-        [SerializeField] private string id = Guid.NewGuid().ToString();
-
         public void Load(SavableData saveData)
         {
             Data data = saveData as Data;
@@ -26,7 +22,6 @@ namespace HHG.SaveSystem.Runtime
         {
             return new Data
             {
-                Id = id,
                 Active = gameObject.activeSelf
             };
         }
