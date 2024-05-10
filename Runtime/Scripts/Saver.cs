@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace HHG.SaveSystem.Runtime
 {
@@ -16,6 +17,7 @@ namespace HHG.SaveSystem.Runtime
         [SerializeField] private string prefabGuid;
 
         private bool instantiated;
+        private bool isTileGameObject;
         private Dictionary<string, ISavable> _savables;
         private Dictionary<string, ISavable> savables {
             get
@@ -37,6 +39,14 @@ namespace HHG.SaveSystem.Runtime
             }
 
             savers[id] = this;
+
+        }
+
+        private void Start()
+        {
+            // transform.parent is null in Awake for tile game objects,
+            // so we check isTileGameObject here in Start instead
+            isTileGameObject = GetComponentInParent<Tilemap>(true);
         }
 
         public void Initialize(string guid)
@@ -57,7 +67,8 @@ namespace HHG.SaveSystem.Runtime
             {
                 Id = id,
                 PrefabGuid = instantiated ? prefabGuid : null,
-                ParentPath = instantiated ? transform.parent?.gameObject.GetPath() : null
+                ParentPath = instantiated ? transform.parent?.gameObject.GetPath() : null,
+                IsTileGameObject = isTileGameObject
             };
 
             foreach (ISavable savable in savables.Values)

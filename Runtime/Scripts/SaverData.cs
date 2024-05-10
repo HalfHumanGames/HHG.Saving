@@ -13,6 +13,7 @@ namespace HHG.SaveSystem.Runtime
         public string Id;
         public string PrefabGuid;
         public string ParentPath;
+        public bool IsTileGameObject;
         [SerializeReference] public List<SavableData> Data = new List<SavableData>();
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,6 +10,11 @@ namespace HHG.SaveSystem.Runtime
     {
         private static Dictionary<string, Saver> savers = new Dictionary<string, Saver>();
         private static List<string> destroy = new List<string>();
+
+        public static event Action BeforeSave;
+        public static event Action AfterSave;
+        public static event Action BeforeLoad;
+        public static event Action AfterLoad;
 
         static Saver()
         {
@@ -23,17 +29,23 @@ namespace HHG.SaveSystem.Runtime
 
         public static SaveData SaveAll()
         {
+            BeforeSave?.Invoke();
+
             SaveData data = new SaveData
             {
                 Data = savers.Values.Select(s => s.Save()).ToList(),
                 Destroy = new List<string>(destroy)
             };
 
+            AfterSave?.Invoke();
+
             return data;
         }
 
         public static void LoadAll(SaveData saveData)
         {
+            BeforeLoad?.Invoke();
+
             foreach (string id in saveData.Destroy)
             {
                 if (savers.TryGetValue(id, out Saver saver))
@@ -42,10 +54,9 @@ namespace HHG.SaveSystem.Runtime
                 }
             }
 
-            foreach (SaverData data in saveData.Data)
+            foreach (SaverData data in saveData.Data.Where(s => !s.IsTileGameObject))
             {
-                Saver saver;
-                if (savers.TryGetValue(data.Id, out saver))
+                if (savers.TryGetValue(data.Id, out Saver saver))
                 {
                     saver.Load(data);
                 }
@@ -57,6 +68,16 @@ namespace HHG.SaveSystem.Runtime
                     saver.Load(data);
                 }
             }
+
+            foreach (SaverData data in saveData.Data.Where(s => s.IsTileGameObject))
+            {
+                if (savers.TryGetValue(data.Id, out Saver saver))
+                {
+                    saver.Load(data);
+                }
+            }
+
+            AfterLoad?.Invoke();
         }
     }
 }
