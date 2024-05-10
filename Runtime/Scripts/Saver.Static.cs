@@ -1,4 +1,6 @@
+using HHG.Common.Runtime;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -44,6 +46,11 @@ namespace HHG.SaveSystem.Runtime
 
         public static void LoadAll(SaveData saveData)
         {
+            CoroutineUtil.StartCoroutine(LoadAllAsync(saveData));
+        }
+
+        private static IEnumerator LoadAllAsync(SaveData saveData)
+        {
             BeforeLoad?.Invoke();
 
             foreach (string id in saveData.Destroy)
@@ -68,6 +75,14 @@ namespace HHG.SaveSystem.Runtime
                     saver.Load(data);
                 }
             }
+
+            // Need to wait for the end of the next frame to make sure
+            // that Saver.Start gets called for tilemap game objects,
+            // but this happens at the end of the next frame, so that's
+            // why we yield two WaitForEndOfFrames
+            yield return new WaitForEndOfFrame();
+            // Saver.Start has still not yet been called at this point
+            yield return new WaitForEndOfFrame();
 
             foreach (SaverData data in saveData.Data.Where(s => s.IsTileGameObject))
             {

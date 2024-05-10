@@ -17,7 +17,8 @@ namespace HHG.SaveSystem.Runtime
         [SerializeField] private string prefabGuid;
 
         private bool instantiated;
-        private bool isTileGameObject;
+        private bool isTilemapGameObject => tilemap != null;
+        private Tilemap tilemap;
         private Dictionary<string, ISavable> _savables;
         private Dictionary<string, ISavable> savables {
             get
@@ -39,14 +40,20 @@ namespace HHG.SaveSystem.Runtime
             }
 
             savers[id] = this;
-
         }
 
         private void Start()
         {
             // transform.parent is null in Awake for tile game objects,
-            // so we check isTileGameObject here in Start instead
-            isTileGameObject = GetComponentInParent<Tilemap>(true);
+            // so we check for a parent tilemap here in Start instead
+            tilemap = GetComponentInParent<Tilemap>(true);
+
+            if (tilemap != null)
+            {
+                savers.Remove(id);
+                id = $"{tilemap.name}/{tilemap.WorldToCell(transform.position)}";
+                savers[id] = this;
+            }
         }
 
         public void Initialize(string guid)
@@ -66,16 +73,19 @@ namespace HHG.SaveSystem.Runtime
             SaverData data = new SaverData
             {
                 Id = id,
-                PrefabGuid = instantiated ? prefabGuid : null,
-                ParentPath = instantiated ? transform.parent?.gameObject.GetPath() : null,
-                IsTileGameObject = isTileGameObject
+                PrefabGuid = !isTilemapGameObject && instantiated ? prefabGuid : null,
+                ParentPath = !isTilemapGameObject && instantiated ? transform.parent?.gameObject.GetPath() : null,
+                IsTileGameObject = isTilemapGameObject
             };
 
             foreach (ISavable savable in savables.Values)
             {
-                SavableData savableData = savable.Save();
-                savableData.Type = savable.GetType().FullName;
-                data.Data.Add(savableData);
+                if (savable.CanSave())
+                {
+                    SavableData savableData = savable.Save();
+                    savableData.Type = savable.GetType().FullName;
+                    data.Data.Add(savableData);
+                }
             }
 
             return data;
