@@ -33,6 +33,11 @@ namespace HHG.SaveSystem.Runtime
 
         private void Awake()
         {
+            BeforeSave += OnBeforeSave;
+            AfterSave += OnAfterSave;
+            BeforeLoad += OnBeforeLoad;
+            AfterLoad += OnAfterLoad;
+
             if (savers.ContainsKey(id))
             {
                 id = Guid.NewGuid().ToString();
@@ -102,6 +107,11 @@ namespace HHG.SaveSystem.Runtime
             }
         }
 
+        public void OnBeforeSave() => savables.Values.ForEach(s => s.OnBeforeSave());
+        public void OnAfterSave() => savables.Values.ForEach(s => s.OnAfterSave());
+        public void OnBeforeLoad() => savables.Values.ForEach(s => s.OnBeforeLoad());
+        public void OnAfterLoad() => savables.Values.ForEach(s => s.OnAfterLoad());
+
         private void OnDestroy()
         {
             if (savers.ContainsKey(id))
@@ -113,6 +123,11 @@ namespace HHG.SaveSystem.Runtime
                     destroy.Add(id);
                 }
             }
+
+            BeforeSave -= OnBeforeSave;
+            AfterSave -= OnAfterSave;
+            BeforeLoad -= OnBeforeLoad;
+            AfterLoad -= OnAfterLoad;
         }
 
         private void OnValidate()

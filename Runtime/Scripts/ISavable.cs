@@ -5,5 +5,9 @@ namespace HHG.SaveSystem.Runtime
         bool CanSave() => true;
         SavableData Save();
         void Load(SavableData saveData);
+        void OnBeforeSave() { }
+        void OnAfterSave() { }
+        void OnBeforeLoad() { }
+        void OnAfterLoad() { }
     }
 }
