@@ -156,7 +156,7 @@ namespace HHG.SaveSystem.Runtime
                 PrefabStage prefabStage = PrefabStageUtility.GetPrefabStage(gameObject);
 
                 bool isPrefabAsset = PrefabUtility.IsPartOfPrefabAsset(gameObject);
-                bool isPrefabStaged = prefabStage != null;
+                bool isPrefabStaged = prefabStage != null && prefabStage.prefabContentsRoot == gameObject;
 
                 GameObject tempPrefab = isPrefabAsset ? gameObject : PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
 
@@ -165,7 +165,7 @@ namespace HHG.SaveSystem.Runtime
                     prefab = tempPrefab;
                 }
 
-                string tempPrefabPath = prefabStage?.assetPath ?? AssetDatabase.GetAssetPath(prefab);
+                string tempPrefabPath = isPrefabStaged ? prefabStage.assetPath : AssetDatabase.GetAssetPath(prefab);
                 string tempPrefabGuid = AssetDatabase.AssetPathToGUID(tempPrefabPath);
 
                 if (prefabGuid != tempPrefabGuid && !string.IsNullOrEmpty(tempPrefabGuid))
