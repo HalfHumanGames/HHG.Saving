@@ -130,6 +130,8 @@ namespace HHG.SaveSystem.Runtime
             AfterLoad -= OnAfterLoad;
         }
 
+#if UNITY_EDITOR
+
         private void OnValidate()
         {
             id = GuidUtil.EnsureUnique(this, s => s.id);
@@ -138,11 +140,11 @@ namespace HHG.SaveSystem.Runtime
             // So we only want to update them when the application is not playing
             if (!Application.isPlaying)
             {
-#if UNITY_EDITOR
                 prefab = PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
                 prefabGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetOrScenePath(prefab));
-#endif
+
             }
         }
+#endif
     }
 }
