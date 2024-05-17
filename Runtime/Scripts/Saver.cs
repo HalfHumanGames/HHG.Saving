@@ -140,7 +140,7 @@ namespace HHG.SaveSystem.Runtime
             // So we only want to update them when the application is not playing
             if (!Application.isPlaying)
             {
-                prefab = PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
+                prefab = PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject);
                 prefabGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetOrScenePath(prefab));
 
             }
