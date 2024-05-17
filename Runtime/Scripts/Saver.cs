@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.SceneManagement;
+
+
 #endif
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -132,33 +135,43 @@ namespace HHG.SaveSystem.Runtime
 
 #if UNITY_EDITOR
 
+        public void EditorInitialize()
+        {
+            OnValidate();
+        }
+
         private void OnValidate()
         {
             string tempId = GuidUtil.EnsureUnique(this, s => s.id);
 
-            if (id != tempId)
+            if (id != tempId && !string.IsNullOrEmpty(tempId))
             {
                 id = tempId;
             }
 
             // The prefab and prefabGuid fields get unset on enter play mode
             // So we only want to update them when the application is not playing
-            if (!Application.isPlaying)
+            if (!Application.isPlaying && !EditorApplication.isCompiling && !EditorApplication.isUpdating)
             {
-                GameObject tempPrefab = PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject);
+                PrefabStage prefabStage = PrefabStageUtility.GetPrefabStage(gameObject);
 
-                if (prefab != tempPrefab)
+                bool isPrefabAsset = PrefabUtility.IsPartOfPrefabAsset(gameObject);
+                bool isPrefabStaged = prefabStage != null;
+
+                GameObject tempPrefab = isPrefabAsset ? gameObject : PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
+
+                if (prefab != tempPrefab && tempPrefab != null)
                 {
                     prefab = tempPrefab;
                 }
 
-                string tempPrefabGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetOrScenePath(prefab));
+                string tempPrefabPath = prefabStage?.assetPath ?? AssetDatabase.GetAssetPath(prefab);
+                string tempPrefabGuid = AssetDatabase.AssetPathToGUID(tempPrefabPath);
 
-                if (tempPrefabGuid != prefabGuid)
+                if (prefabGuid != tempPrefabGuid && !string.IsNullOrEmpty(tempPrefabGuid))
                 {
                     prefabGuid = tempPrefabGuid;
                 }
-
             }
         }
 #endif
