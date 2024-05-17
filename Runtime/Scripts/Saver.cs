@@ -134,14 +134,30 @@ namespace HHG.SaveSystem.Runtime
 
         private void OnValidate()
         {
-            id = GuidUtil.EnsureUnique(this, s => s.id);
+            string tempId = GuidUtil.EnsureUnique(this, s => s.id);
+
+            if (id != tempId)
+            {
+                id = tempId;
+            }
 
             // The prefab and prefabGuid fields get unset on enter play mode
             // So we only want to update them when the application is not playing
             if (!Application.isPlaying)
             {
-                prefab = PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject);
-                prefabGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetOrScenePath(prefab));
+                GameObject tempPrefab = PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject);
+
+                if (prefab != tempPrefab)
+                {
+                    prefab = tempPrefab;
+                }
+
+                string tempPrefabGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetOrScenePath(prefab));
+
+                if (tempPrefabGuid != prefabGuid)
+                {
+                    prefabGuid = tempPrefabGuid;
+                }
 
             }
         }
