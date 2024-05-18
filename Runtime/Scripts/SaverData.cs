@@ -9,10 +9,11 @@ namespace HHG.SaveSystem.Runtime
     public class SaverData
     {
         public GameObject Prefab => AssetRegistry.GetAsset<GameObject>(PrefabGuid);
-
         public string Id;
         public string PrefabGuid;
         public string ParentPath;
+        public Vector3 Position;
+        public Quaternion Rotation;
         public bool IsTileGameObject;
         [SerializeReference] public List<SavableData> Data = new List<SavableData>();
     }

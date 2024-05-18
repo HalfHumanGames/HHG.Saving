@@ -1,3 +1,4 @@
+using HHG.Common.Runtime;
 using System;
 using UnityEngine;
 
@@ -9,27 +10,27 @@ namespace HHG.SaveSystem.Runtime
         [Serializable]
         public class Data : SavableData
         {
-            public Vector3 LocalPosition;
-            public Quaternion LocalRotation;
-            public Vector3 LocalScale;
+            public Vector3 Position;
+            public Quaternion Rotation;
+            public Vector3 Scale;
         }
 
         public SavableData Save()
         {
             return new Data
             {
-                LocalPosition = transform.localPosition,
-                LocalRotation = transform.localRotation,
-                LocalScale = transform.localScale
+                Position = transform.position,
+                Rotation = transform.rotation,
+                Scale = transform.lossyScale
             };
         }
 
         public void Load(SavableData saveData)
         {
             Data data = saveData as Data;
-            transform.localPosition = data.LocalPosition;
-            transform.localRotation = data.LocalRotation;
-            transform.localScale = data.LocalScale;
+            transform.position = data.Position;
+            transform.rotation = data.Rotation;
+            transform.SetGlobalScale(data.Scale);
         }
     }
 }

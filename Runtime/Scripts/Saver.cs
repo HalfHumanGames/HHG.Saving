@@ -41,7 +41,7 @@ namespace HHG.SaveSystem.Runtime
             BeforeLoad += OnBeforeLoad;
             AfterLoad += OnAfterLoad;
 
-            if (savers.ContainsKey(id))
+            if (hasSceneLoaded || savers.ContainsKey(id))
             {
                 id = Guid.NewGuid().ToString();
                 instantiated = true;
@@ -83,6 +83,8 @@ namespace HHG.SaveSystem.Runtime
                 Id = id,
                 PrefabGuid = !isTilemapGameObject && instantiated ? prefabGuid : null,
                 ParentPath = !isTilemapGameObject && instantiated ? transform.parent?.gameObject.GetPath() : null,
+                Position = transform.position,
+                Rotation = transform.rotation,
                 IsTileGameObject = isTilemapGameObject
             };
 

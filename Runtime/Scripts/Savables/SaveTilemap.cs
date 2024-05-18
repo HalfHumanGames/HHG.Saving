@@ -38,6 +38,7 @@ namespace HHG.SaveSystem.Runtime
             TilemapAsset tilemap = ScriptableObject.CreateInstance<TilemapAsset>();
             tilemap.Initiialize(data.Tiles.Select(t => AssetRegistry.GetAsset<TileBase>(t)), data.Tilemaps);
             exporter.Load(tilemap);
+            Destroy(tilemap);
         }
     }
 }

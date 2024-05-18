@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
 namespace HHG.SaveSystem.Runtime
@@ -12,6 +13,7 @@ namespace HHG.SaveSystem.Runtime
     {
         private static Dictionary<string, Saver> savers = new Dictionary<string, Saver>();
         private static List<string> destroy = new List<string>();
+        private static bool hasSceneLoaded;
 
         public static event Action BeforeSave;
         public static event Action AfterSave;
@@ -20,11 +22,18 @@ namespace HHG.SaveSystem.Runtime
 
         static Saver()
         {
+            SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
+
+        private static void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
+        {
+            hasSceneLoaded = true;
         }
 
         private static void OnSceneUnloaded(Scene scene)
         {
+            hasSceneLoaded = false;
             savers.Clear();
             destroy.Clear();
         }
@@ -70,7 +79,8 @@ namespace HHG.SaveSystem.Runtime
                 else
                 {
                     Transform parent = GameObject.Find(data.ParentPath)?.transform;
-                    saver = Instantiate(data.Prefab, parent).GetComponent<Saver>();
+                    GameObject go = Instantiate(data.Prefab, data.Position, data.Rotation, parent);
+                    saver = go.GetComponent<Saver>();
                     saver.Initialize(data.Id);
                     saver.Load(data);
                 }
