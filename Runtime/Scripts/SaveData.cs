@@ -11,6 +11,12 @@ namespace HHG.SaveSystem.Runtime
         [SerializeReference] public List<SaverData> Data = new List<SaverData>();
         public List<string> Destroy = new List<string>();
 
+        public void Clear()
+        {
+            Data.Clear();
+            Destroy.Clear();
+        }
+
         public SaveData Clone()
         {
             SaveData clone = new SaveData();
