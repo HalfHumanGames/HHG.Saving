@@ -153,7 +153,7 @@ namespace HHG.SaveSystem.Runtime
 
             // The prefab and prefabGuid fields get unset on enter play mode
             // So we only want to update them when the application is not playing
-            if (!Application.isPlaying && !EditorApplication.isCompiling && !EditorApplication.isUpdating)
+            if (!Application.isPlaying && !EditorApplication.isCompiling && !EditorApplication.isUpdating && !BuildPipeline.isBuildingPlayer)
             {
                 PrefabStage prefabStage = PrefabStageUtility.GetPrefabStage(gameObject);
                 bool isPrefabAsset = PrefabUtility.IsPartOfPrefabAsset(gameObject);
