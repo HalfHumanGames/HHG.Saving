@@ -156,6 +156,7 @@ namespace HHG.SaveSystem.Runtime
             if (!Application.isPlaying && !EditorApplication.isCompiling && !EditorApplication.isUpdating && !BuildPipeline.isBuildingPlayer)
             {
                 PrefabStage prefabStage = PrefabStageUtility.GetPrefabStage(gameObject);
+
                 bool isPrefabAsset = PrefabUtility.IsPartOfPrefabAsset(gameObject);
                 bool isPrefabStaged = false;
 
@@ -171,7 +172,29 @@ namespace HHG.SaveSystem.Runtime
                     }
                 }
 
-                GameObject tempPrefab = isPrefabAsset ? gameObject : PrefabUtility.GetCorrespondingObjectFromSource(PrefabUtility.GetNearestPrefabInstanceRoot(gameObject));
+                GameObject tempPrefab;
+
+                if (isPrefabAsset)
+                {
+                    tempPrefab = gameObject;
+                }
+                else
+                {
+                    GameObject instanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(gameObject);
+
+                    if (instanceRoot == null)
+                    {
+                        return;
+                    }
+
+                    tempPrefab = PrefabUtility.GetCorrespondingObjectFromSource(instanceRoot);
+
+                    if (tempPrefab == null)
+                    {
+                        return;
+                    }
+                }
+                
 
                 if (prefab != tempPrefab && tempPrefab != null)
                 {
