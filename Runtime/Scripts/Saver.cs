@@ -171,14 +171,14 @@ namespace HHG.SaveSystem.Runtime
                     }
                 }
 
-                GameObject tempPrefab = isPrefabAsset ? gameObject : PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
+                GameObject tempPrefab = isPrefabAsset ? gameObject : PrefabUtility.GetCorrespondingObjectFromSource(PrefabUtility.GetNearestPrefabInstanceRoot(gameObject));
 
                 if (prefab != tempPrefab && tempPrefab != null)
                 {
                     prefab = tempPrefab;
                 }
 
-                string tempPrefabPath = isPrefabStaged ? prefabStage.assetPath : AssetDatabase.GetAssetPath(prefab);
+                string tempPrefabPath = isPrefabStaged ? prefabStage.assetPath : PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(prefab);
                 string tempPrefabGuid = AssetDatabase.AssetPathToGUID(tempPrefabPath);
 
                 if (prefabGuid != tempPrefabGuid && !string.IsNullOrEmpty(tempPrefabGuid))

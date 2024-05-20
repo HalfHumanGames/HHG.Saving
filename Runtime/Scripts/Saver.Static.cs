@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
 namespace HHG.SaveSystem.Runtime
@@ -78,7 +77,7 @@ namespace HHG.SaveSystem.Runtime
                 }
                 else
                 {
-                    Transform parent = GameObject.Find(data.ParentPath)?.transform;
+                    Transform parent = GameObjectUtil.FindOrCreate(data.ParentPath)?.transform;
                     GameObject go = Instantiate(data.Prefab, data.Position, data.Rotation, parent);
                     saver = go.GetComponent<Saver>();
                     saver.Initialize(data.Id);
