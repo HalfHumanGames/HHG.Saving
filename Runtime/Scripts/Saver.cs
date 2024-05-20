@@ -156,9 +156,20 @@ namespace HHG.SaveSystem.Runtime
             if (!Application.isPlaying && !EditorApplication.isCompiling && !EditorApplication.isUpdating)
             {
                 PrefabStage prefabStage = PrefabStageUtility.GetPrefabStage(gameObject);
-
                 bool isPrefabAsset = PrefabUtility.IsPartOfPrefabAsset(gameObject);
-                bool isPrefabStaged = prefabStage != null && prefabStage.prefabContentsRoot == gameObject;
+                bool isPrefabStaged = false;
+
+                if (prefabStage != null)
+                {
+                    try
+                    {
+                        isPrefabStaged = prefabStage.prefabContentsRoot == gameObject;
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        return; // Stage not loaded yet
+                    }
+                }
 
                 GameObject tempPrefab = isPrefabAsset ? gameObject : PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
 
