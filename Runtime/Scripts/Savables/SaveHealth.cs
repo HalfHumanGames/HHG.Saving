@@ -26,7 +26,7 @@ namespace HHG.SaveSystem.Runtime
         public void Load(SavableData saveData)
         {
             Data data = saveData as Data;
-            health.Initialize(data.Health);
+            health.InitializeValue(data.Health);
         }
     }
 }
