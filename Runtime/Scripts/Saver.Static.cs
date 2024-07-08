@@ -89,9 +89,9 @@ namespace HHG.SaveSystem.Runtime
             // that Saver.Start gets called for tilemap game objects,
             // but this happens at the end of the next frame, so that's
             // why we yield two WaitForEndOfFrames
-            yield return new WaitForEndOfFrame();
+            yield return WaitFor.EndOfFrame;
             // Saver.Start has still not yet been called at this point
-            yield return new WaitForEndOfFrame();
+            yield return WaitFor.EndOfFrame;
 
             foreach (SaverData data in saveData.Data.Where(s => s.IsTileGameObject))
             {
