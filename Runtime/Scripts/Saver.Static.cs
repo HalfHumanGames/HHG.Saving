@@ -10,9 +10,12 @@ namespace HHG.SaveSystem.Runtime
 {
     public partial class Saver
     {
+        public static bool IsLoading => isLoading;
+
         private static Dictionary<string, Saver> savers = new Dictionary<string, Saver>();
         private static List<string> destroy = new List<string>();
         private static bool hasSceneLoaded;
+        private static bool isLoading;
 
         public static event Action BeforeSave;
         public static event Action AfterSave;
@@ -59,6 +62,7 @@ namespace HHG.SaveSystem.Runtime
 
         private static IEnumerator LoadAllAsync(SaveData saveData)
         {
+            isLoading = true;
             BeforeLoad?.Invoke();
 
             foreach (string id in saveData.Destroy)
@@ -77,7 +81,8 @@ namespace HHG.SaveSystem.Runtime
                 }
                 else
                 {
-                    Transform parent = GameObjectUtil.FindOrCreate(data.ParentPath)?.transform;
+                    GameObject parentGO = GameObjectUtil.FindOrCreate(data.ParentPath);
+                    Transform parent = parentGO == null ? null : parentGO.transform;
                     GameObject go = Instantiate(data.Prefab, data.Position, data.Rotation, parent);
                     saver = go.GetComponent<Saver>();
                     saver.Initialize(data.Id);
@@ -102,6 +107,7 @@ namespace HHG.SaveSystem.Runtime
             }
 
             AfterLoad?.Invoke();
+            isLoading = false;
         }
     }
 }
