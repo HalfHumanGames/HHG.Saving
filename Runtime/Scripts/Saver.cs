@@ -13,7 +13,10 @@ namespace HHG.SaveSystem.Runtime
 {
     public partial class Saver : MonoBehaviour
     {
+        public bool CanSave => mode == SaveMode.Always || gameObject.activeInHierarchy;
+
         [SerializeField] private string id = Guid.NewGuid().ToString();
+        [SerializeField] private SaveMode mode;
         [SerializeField] private GameObject prefab;
         [SerializeField] private string prefabGuid;
 
@@ -30,6 +33,12 @@ namespace HHG.SaveSystem.Runtime
                 }
                 return _savables;
             }
+        }
+
+        private enum SaveMode
+        {
+            Always,
+            IfActive
         }
 
         private void Awake()

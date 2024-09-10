@@ -46,7 +46,7 @@ namespace HHG.SaveSystem.Runtime
 
             SaveData data = new SaveData
             {
-                Data = savers.Values.Select(s => s.Save()).ToList(),
+                Data = savers.Values.Where(s => s.CanSave).Select(s => s.Save()).ToList(),
                 Destroy = new List<string>(destroy)
             };
 
