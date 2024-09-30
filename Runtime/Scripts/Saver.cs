@@ -17,6 +17,7 @@ namespace HHG.SaveSystem.Runtime
 
         [SerializeField] private string id = Guid.NewGuid().ToString();
         [SerializeField] private SaveMode mode;
+        [SerializeField] private SaveScope scope;
         [SerializeField] private GameObject prefab;
         [SerializeField] private string prefabGuid;
 
@@ -29,7 +30,8 @@ namespace HHG.SaveSystem.Runtime
             {
                 if (_savables == null)
                 {
-                    _savables = GetComponents<ISavable>().ToDictionary(s => s.GetType().FullName, s => s);
+                    ISavable[] components = scope == SaveScope.SelfAndChildren ? GetComponentsInChildren<ISavable>(true) : GetComponents<ISavable>();
+                    _savables = components.ToDictionary(s => s.GetType().FullName, s => s);
                 }
                 return _savables;
             }
@@ -39,6 +41,12 @@ namespace HHG.SaveSystem.Runtime
         {
             Always,
             IfActive
+        }
+
+        private enum SaveScope
+        {
+            Self,
+            SelfAndChildren
         }
 
         private void Awake()
