@@ -83,6 +83,13 @@ namespace HHG.SaveSystem.Runtime
                 {
                     GameObject parentGO = GameObjectUtil.FindOrCreate(data.ParentPath);
                     Transform parent = parentGO == null ? null : parentGO.transform;
+
+                    if (data.Prefab == null)
+                    {
+                        Debug.LogError($"data.Prefab is null:\n{JsonUtility.ToJson(data, true)}");
+                        continue;
+                    }
+
                     GameObject go = Instantiate(data.Prefab, data.Position, data.Rotation, parent);
                     saver = go.GetComponent<Saver>();
                     saver.Initialize(data.Id);
