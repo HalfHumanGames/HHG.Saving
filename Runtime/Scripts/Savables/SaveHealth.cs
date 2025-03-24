@@ -1,7 +1,7 @@
 using HHG.Common.Runtime;
 using UnityEngine;
 
-namespace HHG.SaveSystem.Runtime
+namespace HHG.Saving.Runtime
 {
     [RequireComponent(typeof(Saver), typeof(Health))]
     public class SaveHealth : MonoBehaviour, ISavable

@@ -1,4 +1,4 @@
-namespace HHG.SaveSystem.Runtime
+namespace HHG.Saving.Runtime
 {
     public interface ISavable
     {

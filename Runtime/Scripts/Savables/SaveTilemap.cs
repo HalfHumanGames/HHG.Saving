@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace HHG.SaveSystem.Runtime
+namespace HHG.Saving.Runtime
 {
     [RequireComponent(typeof(Saver), typeof(TilemapExporter))]
     public class SaveTilemap : MonoBehaviour, ISavable

@@ -1,13 +1,13 @@
 {
-  "name": "com.halfhumangames.savesystem",
+  "name": "com.halfhumangames.saving",
   "version": "1.0.0",
-  "displayName": "HHG - Save System",
+  "displayName": "HHG - Saving",
   "description": "Save system for Unity",
   "unity": "2020.3",
   "unityRelease": "6f1",
-  "documentationUrl": "https://github.com/HalfHumanGames/HHG.SaveSystem/blob/main/README.md",
-  "changelogUrl": "https://github.com/HalfHumanGames/HHG.SaveSystem/blob/main/CHANGELOG.md",
-  "licensesUrl": "https://github.com/HalfHumanGames/HHG.SaveSystem/blob/main/LICENSE",
+  "documentationUrl": "https://github.com/HalfHumanGames/HHG.Saving/blob/main/README.md",
+  "changelogUrl": "https://github.com/HalfHumanGames/HHG.Saving/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/HalfHumanGames/HHG.Saving/blob/main/LICENSE",
   "keywords": [
     "Save",
     "Saving",
@@ -20,6 +20,6 @@
     "url": "https://github.com/HalfHumanGames"
   },
   "dependencies": {
-     "com.halfhumangames.common": "1.0.0"
+    "com.halfhumangames.common": "1.0.0"
   }
 }

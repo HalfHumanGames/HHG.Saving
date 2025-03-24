@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HHG.SaveSystem.Runtime
+namespace HHG.Saving.Runtime
 {
     [RequireComponent(typeof(Saver))]
     public class SaveMonoBehaviour : MonoBehaviour, ISavable

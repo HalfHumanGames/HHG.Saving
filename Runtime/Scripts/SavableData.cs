@@ -1,6 +1,6 @@
 using System;
 
-namespace HHG.SaveSystem.Runtime
+namespace HHG.Saving.Runtime
 {
     [Serializable]
     public abstract class SavableData

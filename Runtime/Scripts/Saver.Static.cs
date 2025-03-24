@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace HHG.SaveSystem.Runtime
+namespace HHG.Saving.Runtime
 {
     public partial class Saver
     {

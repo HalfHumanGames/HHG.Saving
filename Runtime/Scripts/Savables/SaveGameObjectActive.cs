@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace HHG.SaveSystem.Runtime
+namespace HHG.Saving.Runtime
 {
     [RequireComponent(typeof(Saver))]
     public class SaveGameObjectActive : MonoBehaviour, ISavable

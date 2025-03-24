@@ -2,7 +2,7 @@ using HHG.Common.Runtime;
 using System;
 using UnityEngine;
 
-namespace HHG.SaveSystem.Runtime
+namespace HHG.Saving.Runtime
 {
     [RequireComponent(typeof(Saver))]
     public class SaveTransform : MonoBehaviour, ISavable
